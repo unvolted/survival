@@ -266,8 +266,9 @@ DF_WEIGHT_HALF = 0.95
 
 def deadfall_frame():
     posts = [geo.box((sx * DF_POST_X - 0.1, -0.1, 0), (sx * DF_POST_X + 0.1, 0.1, DF_H), W) for sx in (-1, 1)]
-    bar = geo.box((-DF_POST_X - 0.1, -0.1, DF_H - 0.2), (DF_POST_X + 0.1, 0.1, DF_H), W)
-    rope = geo.box((-0.01, -0.01, DF_WEIGHT_Z + LOG_D - 0.01), (0.01, 0.01, DF_H - 0.19), R)
+    # crossbar set inside the post faces (no coplanar overlap with the posts)
+    bar = geo.box((-DF_POST_X - 0.07, -0.08, DF_H - 0.18), (DF_POST_X + 0.07, 0.08, DF_H - 0.02), W)
+    rope = geo.box((-0.01, -0.01, DF_WEIGHT_Z + LOG_D - 0.01), (0.01, 0.01, DF_H - 0.16), R)
     trip = geo.box((-DF_POST_X + 0.09, -0.005, 0.195), (DF_POST_X - 0.09, 0.005, 0.205), R)
     return {"parts": posts + [bar, rope, trip], "ucx": posts + [bar],
             "sockets": [Socket("SOCKET_WeightArmed", (0, 0, DF_WEIGHT_Z))]}

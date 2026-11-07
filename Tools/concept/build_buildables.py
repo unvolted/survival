@@ -319,7 +319,7 @@ def barricade(v, kind, tier, ox, oy_floor=0):
     if kind == "window":
         hole = (ox + 50, 90, ox + 150, 210)
     else:
-        hole = (ox + 50, 0, ox + 150, 210)
+        hole = (ox + 50, 0, ox + 150, 220)
     ruin_wall_patch(v, ox, ox + 200, 0, 300, [hole], seed=int(ox))
     x0, y0, x1, y1 = hole
     cx = (x0 + x1) / 2
@@ -442,7 +442,7 @@ def build_gatetower():
     tcol = {1: C["Bark"], 2: "#6B5E48", 3: "#4E5457"}
 
     # ---------------- A: barricades
-    sh.panel(30, 130, 2400, 1150, "A  Barricaded door / window · SM_Build_Barricade", "fits ruin-kit openings: window 100 × 120 (sill 90), door 100 × 210")
+    sh.panel(30, 130, 2400, 1150, "A  Barricaded door / window · SM_Build_Barricade", "fits ruin-kit openings: window 100 × 120 (sill 90), door 100 × 220")
     s = 1.55
     names = {1: "T1 · poles", 2: "T2 · planks + nails", 3: "T3 · welded sheet"}
     for t in (1, 2, 3):
@@ -458,14 +458,14 @@ def build_gatetower():
     v.dim_v(90, 210, 50, "120", off=-20, size=13)
     v.dim_v(0, 90, 50, "sill 90", off=-20, size=13)
     v2 = View(sh, 110 + 360, 735, s)
-    v2.dim_v(0, 210, 150, "210", off=22, size=13)
+    v2.dim_v(0, 220, 150, "220", off=22, size=13)
     vb = View(sh, 110 + 780, 735, s)
     vb.dim_h(30, 170, 210 - 16, "plank 140 × 20 × 3", off=-172, size=14)
     vc = View(sh, 110 + 1560, 735, s)
     vc.dim_h(35, 165, 225, "sheet 130 × 150", off=-24, size=14)
     bnotes = ("T1: poles Ø10 × 140, 4 (window) / 7 (door), nailed into the frame 20 cm past each side. "
               "T2: planks 140 × 20 × 3, 4 / 6 across with ±8° random tilt plus one diagonal brace, 2 nails each end. "
-              "T3: one scrap sheet 130 × 150 (window) or 130 × 225 (door), 1 cm thick, welded to steel angle tabs anchored in the wall; "
+              "T3: one scrap sheet 130 × 150 (window) or 130 × 235 (door), 1 cm thick, welded to steel angle tabs anchored in the wall; "
               "same 2 cm stand-off from the wall face as wall plates. Each pole, plank and sheet is a separate mesh added one at a time; "
               "the barricade snaps to SOCKET_Opening on ruin window and door pieces. Damaged: planks split, hanging by one nail; sheet bent outward at one corner.")
     sh.text(110, 820, bnotes, 18, "Regular", INK, maxw=1460)
