@@ -16,15 +16,19 @@ design/  (game info)
 2. modeler          → builds 3D models using those images as reference
    │                   writes: assets/models/<asset>/
    ▼
-3. game-builder     → builds the game from the models + the info
-                       writes: game/
+3. game-builder     → builds the game in Unreal Engine 5 from the models + the info
+                       writes: game/  (UE5 C++ project)
 ```
 
 | Stage | Agent (`.claude/agents/`) | Reads | Writes |
 |-------|---------------------------|-------|--------|
 | 1 | `concept-artist` | `design/` | `assets/concepts/<asset>/` (images + `brief.md`) |
 | 2 | `modeler` | `assets/concepts/<asset>/`, `design/` | `assets/models/<asset>/` (`.glb`/model code + `model.md`) |
-| 3 | `game-builder` | `assets/models/`, `design/` | `game/` |
+| 3 | `game-builder` | `assets/models/`, `design/` | `game/` (Unreal Engine 5 C++ project) |
+
+**The game is always built in Unreal Engine 5.** Gameplay is written in C++, and models are brought in with
+the editor Python import script `game/Scripts/import_assets.py`. Unreal is not installed in the cloud container,
+so compiling and running the game needs the user's own computer with Unreal Engine attached to the session.
 
 ### How to run it
 
@@ -43,7 +47,8 @@ design/  (game info)
   in all three folders.
 - `assets/concepts/<asset>/brief.md`: what the asset is, the prompt used, the views generated, and
   which image is the main reference.
-- `assets/models/<asset>/model.md`: file name and format, scale (1 unit = 1 metre), origin/pivot,
-  forward axis (−Z), polygon/part count, and which concept images it follows.
+- `assets/models/<asset>/model.md`: file name and format (`.glb`), scale (1 unit = 1 metre), origin/pivot,
+  axes (glTF standard: +Y up, front faces +Z, which Unreal's glTF importer converts), polygon/part count,
+  and which concept images it follows.
 - If a stage cannot finish (no image credits, a missing reference), it says so in its notes file and
   reports back. The next stage does not start on a missing input.
