@@ -13,7 +13,7 @@ enum class ERFInfectionRule : uint8
 	/** Only bites infect (default). */
 	BiteOnly		UMETA(DisplayName = "Bite only"),
 	/** Bites always infect; scratches and lacerations have a hidden chance to infect. */
-	ZomboidRules	UMETA(DisplayName = "Zomboid rules"),
+	ZomboidRules	UMETA(DisplayName = "Zomboid rules")
 };
 
 /**

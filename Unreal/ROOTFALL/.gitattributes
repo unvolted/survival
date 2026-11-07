@@ -1,0 +1,9 @@
+# Windows batch files need CRLF line endings on checkout.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+# Unreal text sources
+*.cs    text eol=lf
+*.h     text eol=lf
+*.cpp   text eol=lf
+*.ini   text eol=lf
+*.uproject text eol=lf

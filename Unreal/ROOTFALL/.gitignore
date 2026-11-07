@@ -1,0 +1,27 @@
+# ROOTFALL Unreal project. The repo root .gitignore already ignores Binaries/, Intermediate/,
+# Saved/, DerivedDataCache/, .vs/, *.sln, .vscode/ and plugin build output for this folder;
+# they are repeated here so the rules still hold if the project folder is moved.
+Binaries/
+Intermediate/
+Saved/
+DerivedDataCache/
+.vs/
+.vscode/
+*.sln
+Plugins/*/Binaries/
+Plugins/*/Intermediate/
+
+# IDE and build tool files
+.idea/
+*.code-workspace
+*.VC.db
+*.VC.opendb
+*.opensdf
+*.sdf
+*.suo
+*.xcworkspace
+*.xcodeproj/
+
+# Python caches from Scripts/
+__pycache__/
+*.pyc
