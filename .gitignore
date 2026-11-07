@@ -1,0 +1,19 @@
+# Unreal build output
+Unreal/ROOTFALL/Binaries/
+Unreal/ROOTFALL/Intermediate/
+Unreal/ROOTFALL/Saved/
+Unreal/ROOTFALL/DerivedDataCache/
+Unreal/ROOTFALL/.vs/
+Unreal/ROOTFALL/*.sln
+Unreal/ROOTFALL/.vscode/
+Unreal/ROOTFALL/Plugins/*/Binaries/
+Unreal/ROOTFALL/Plugins/*/Intermediate/
+# Blender backups
+*.blend1
+*.blend2
+# Python
+__pycache__/
+*.pyc
+.venv*/
+# Scratch
+/tmp/
