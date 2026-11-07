@@ -124,7 +124,8 @@ def hull(points, mat=None, merge_coplanar=False):
     for p in points:
         bm.verts.new(Vector(p))
     res = bmesh.ops.convex_hull(bm, input=list(bm.verts), use_existing_faces=False)
-    junk = [g for g in res["geom_interior"] + res["geom_unused"] if isinstance(g, bmesh.types.BMVert)]
+    junk = list({g for g in res["geom_interior"] + res["geom_unused"] if isinstance(g, bmesh.types.BMVert)})
+    junk += [v for v in bm.verts if not v.link_faces and v not in junk]
     if junk:
         bmesh.ops.delete(bm, geom=junk, context='VERTS')
     if merge_coplanar:

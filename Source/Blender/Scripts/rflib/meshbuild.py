@@ -45,8 +45,13 @@ def recalc_normals(ob):
 def boolean_difference(ob, cutter_parts, collection):
     """Subtract closed cutter shells from `ob` with the Exact solver and bake the result."""
     cutters = []
+    # Cutters carry the host's first material: the Exact solver copies operand material slots onto
+    # the result, and an empty slot would leave the cut faces without a material.
+    host_mat = ob.data.materials[0] if ob.data.materials else None
     for i, cp in enumerate(cutter_parts):
         c = build_object(f"_cutter_{i}", [cp], {}, collection, require_material=False)
+        if host_mat is not None:
+            c.data.materials.append(host_mat)
         c.display_type = 'WIRE'
         c.hide_render = True
         mod = ob.modifiers.new(f"cut_{i}", 'BOOLEAN')

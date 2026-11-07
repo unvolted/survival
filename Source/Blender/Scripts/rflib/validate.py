@@ -102,11 +102,17 @@ def topology_report(ob):
 
 
 def convex_errors(ob, eps=1e-5):
+    """Every vertex must lie behind every triangle's plane (triangles, so non-planar ngons count)."""
     me = ob.data
+    me.calc_loop_triangles()
     pts = [v.co for v in me.vertices]
-    for poly in me.polygons:
-        n = poly.normal
-        d = n.dot(me.vertices[poly.vertices[0]].co)
+    for tri in me.loop_triangles:
+        a, b, c = (me.vertices[i].co for i in tri.vertices)
+        n = (b - a).cross(c - a)
+        if n.length < 1e-12:
+            continue
+        n.normalize()
+        d = n.dot(a)
         if any(n.dot(p) - d > eps for p in pts):
             return [f"{ob.name}: not convex"]
     return []

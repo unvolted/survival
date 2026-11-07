@@ -460,7 +460,7 @@ def build_gatetower():
     v2 = View(sh, 110 + 360, 735, s)
     v2.dim_v(0, 210, 150, "210", off=22, size=13)
     vb = View(sh, 110 + 780, 735, s)
-    vb.dim_h(30, 170, 210 - 16, "plank 140 × 20 × 3", off=-205, size=14)
+    vb.dim_h(30, 170, 210 - 16, "plank 140 × 20 × 3", off=-172, size=14)
     vc = View(sh, 110 + 1560, 735, s)
     vc.dim_h(35, 165, 225, "sheet 130 × 150", off=-24, size=14)
     bnotes = ("T1: poles Ø10 × 140, 4 (window) / 7 (door), nailed into the frame 20 cm past each side. "
@@ -508,23 +508,24 @@ def build_gatetower():
     s3 = 1.45
     for t in (1, 2, 3):
         ox = 2540 + (t - 1) * 510
-        sh.label_box(ox, 215, {1: "T1 · log", 2: "T2 · + plank", 3: "T3 · + plated"}[t], 19, "Bold", "#FFFFFF", tcol[t])
-        v = View(sh, ox, 1000, s3)
+        sh.label_box(ox, 1105, {1: "T1 · log", 2: "T2 · + plank", 3: "T3 · + plated"}[t], 19, "Bold", "#FFFFFF", tcol[t])
+        v = View(sh, ox, 1060, s3)
         v.grid(0, 0, 200, 500, 100, labels=(t == 1))
         tower(v, t)
         if t == 3:
-            scale_figure(View(sh, ox, 1000 - 400 * s3, s3), 140, label=False)
-    v = View(sh, 2540, 1000, s3)
+            scale_figure(View(sh, ox, 1060 - 400 * s3, s3), 140, label=False)
+    v = View(sh, 2540, 1060, s3)
     v.dim_v(0, 400, 0, "deck 400", off=-44, size=13)
     v.dim_v(400, 500, 0, "100", off=-44, size=13)
     v.dim_h(0, 200, 0, "200 footprint", off=34, size=13, ext_from=0)
     v.dim_h(75, 125, 30, "50", off=-14, size=12)
     # plan of deck
-    sh.text(2540, 1090, "Deck plan (T2)", 18, "Bold")
-    vp = View(sh, 2600, 1470, 1.5)
+    sh.text(2540, 1200, "Deck plan (T2)", 18, "Bold")
+    vp = View(sh, 2600, 1580, 1.5)
     vp.grid(0, 0, 200, 200, 100, labels=True, ground=False)
     for i in range(11):
         vp.rect(-10, -10 + i * 20, 210, 10 + i * 20, fill=C["Weathered Plank"], width=1)
+    vp.grid(0, 0, 200, 200, 100, labels=True, ground=False)
     for (xx, yy) in ((12.5, 12.5), (187.5, 12.5), (12.5, 187.5), (187.5, 187.5)):
         vp.circle(xx, yy, 12.5, fill=C["Bark"], width=1.5)
     vp.rect(70, 10, 130, 70, fill="#1E2124", width=1.5)
@@ -536,12 +537,572 @@ def build_gatetower():
               "Ladder 50 wide, rails 10 × 10, rungs every 30 cm, from ground up through a 60 × 60 hatch to 450. "
               "Separate meshes: ladder (climbable volume), hatch lid (moving, hinged on the back edge), parapet sets, plates. "
               "Pivot bottom-left corner of footprint. Damaged: missing parapet boards, one brace snapped; Broken: deck partly collapsed, tower leans 5°.")
-    sh.text(3000, 1130, tnotes, 18, "Regular", INK, maxw=1020)
-    blocked_box(sh, 2540, 1600, 1480, 260, "Painted watchtower reference",
+    sh.text(3000, 1220, tnotes, 18, "Regular", INK, maxw=1020)
+    blocked_box(sh, 2540, 1720, 1480, 260, "Painted watchtower reference",
                 "Generation refused: free-tier daily image limit reached (429 free_tier_image_limit_reached) on 2026-11-07. "
                 "Model from the drawn elevations; painted reference to be generated on a later run.")
-    sh.text(2540, 1880, "180 cm figure stands on the T3 deck for scale.", 16, "Regular", INK2)
+    sh.text(2540, 2000, "180 cm figure stands on the T3 deck for scale.", 16, "Regular", INK2)
     sh.save(os.path.join(CONCEPT, "CA_Buildables_GateTower_Sheet.png"))
+
+
+# ======================================================================== TRAPS SHEET
+SOIL = "#5E4E3C"
+VOID = "#2A2520"
+
+
+def ground(v, x0, x1, y=0, depth=40):
+    v.rect(x0, y - depth, x1, y, fill=SOIL, outline=None)
+    v.line([(x0, y), (x1, y)], INK, 2)
+
+
+def leaf_litter(v, x0, x1, y, seed=0, n=40):
+    r = rng(seed)
+    for _ in range(n):
+        v.circle(r.uniform(x0, x1), y + r.uniform(0, 5), r.uniform(1.5, 3.5),
+                 fill=r.choice([C["Lichen"], C["Moss"], C["Bark"], C["Rotten Wood"], "#8C7A50"]), outline=None)
+
+
+def spike_pit_section(v, t):
+    v.rect(-50, -190, 250, 0, fill=SOIL, outline=None)
+    v.rect(0, -150, 200, 0, fill=VOID, width=1.5)
+    if t == 2:
+        for (a, b) in ((0, 4), (196, 200)):
+            v.rect(a, -150, b, 0, fill=C["Weathered Plank"], width=1)
+        v.rect(0, -150, 200, -146, fill=C["Weathered Plank"], width=1)
+    if t == 3:
+        v.rect(4, -150, 196, -147, fill=C["Steel"], width=1.2)
+    for x in (25, 75, 125, 175):
+        if t == 3:
+            stake(v, x, -147, 90, 75, d=3.5, tip=12, col=C["Steel"], tipcol=C["Rust Orange"], width=1)
+        else:
+            stake(v, x, -150, 90, 75, d=6, tip=22)
+    # cover lattice + litter
+    v.rect(-15, -3, 215, 1, fill=C["Bark"], width=1.2)
+    for x in range(-10, 215, 20):
+        v.line([(x, -2), (x + 10, 1)], C["Fresh-cut Wood"], 1)
+    leaf_litter(v, -15, 215, 1, seed=t, n=50)
+    v.line([(-50, 0), (0, 0)], INK, 2)
+    v.line([(200, 0), (250, 0)], INK, 2)
+
+
+def spike_pit_plan(v):
+    v.rect(0, 0, 200, 200, fill=VOID, width=1.5)
+    for x in (25, 75, 125, 175):
+        for y in (25, 75, 125, 175):
+            v.circle(x, y, 3, fill=C["Fresh-cut Wood"], width=1)
+    for k in range(0, 231, 23):
+        v.line([(-15 + k, -15), (-15 + k, 215)], C["Bark"], 2, alpha=200)
+        v.line([(-15, -15 + k), (215, -15 + k)], C["Bark"], 2, alpha=200)
+    v.rect(-15, -15, 215, 215, fill=None, outline=C["Bark"], width=2)
+
+
+def barbed_fence(v, t):
+    ground(v, -20, 420)
+    for x in (0, 200, 400):
+        if t == 1:
+            pole_v(v, x, 0, 125, 10, seed=x, sharpen=10)
+        elif t == 2:
+            v.rect(x - 5, 0, x + 5, 125, fill=C["Weathered Plank"], width=1.5)
+            if x < 400:
+                v.line([(x + 5, 10), (x + 195, 110)], C["Weathered Plank"], 5)
+                v.line([(x + 5, 110), (x + 195, 10)], C["Weathered Plank"], 5)
+        else:
+            v.rect(x - 2.5, 0, x + 2.5, 125, fill=C["Steel"], width=1.2)
+            v.rect(x - 8, 0, x + 8, 2, fill=C["Weld Scorch"], width=1)
+    strands = (30, 60, 90, 115) if t < 3 else (20, 45, 70, 95, 120)
+    for yy in strands:
+        sag = 4
+        for a in (0, 200):
+            barbed_wire(v, a, yy, a + 100, yy - sag)
+            barbed_wire(v, a + 100, yy - sag, a + 200, yy)
+    if t == 3:
+        for i in range(13):
+            v.circle(15 + i * 31, 140, 18, fill=None, outline="#55595B", width=1.3)
+
+
+def noise_trap(v, t):
+    ground(v, -20, 320)
+    for x in (0, 300):
+        if t == 1:
+            pole_v(v, x, 0, 60, 5, seed=x, sharpen=6)
+        elif t == 2:
+            v.rect(x - 4, 0, x + 4, 60, fill=C["Weathered Plank"], width=1.2)
+        else:
+            v.rect(x - 1.5, 0, x + 1.5, 60, fill=C["Steel"], width=1)
+    if t == 3:
+        v.line([(0, 40), (300, 38)], "#55595B", 1.4)
+    else:
+        rope(v, [(0, 40), (150, 37), (300, 40)], 1)
+    k = 0
+    for cx in (75, 150, 225):
+        for dx in (-9, 0, 9):
+            v.line([(cx + dx, 38), (cx + dx, 30)], "#8C7A58", 1)
+            if t == 3 and dx == 0:
+                v.poly([(cx - 5, 30), (cx + 6, 30), (cx + 8, 16), (cx - 3, 14)], fill=mix(C["Steel"], C["Rust Orange"], 0.5), width=1)
+            else:
+                tin_can(v, cx + dx, 30, seed=k)
+            k += 1
+
+
+def tripwire(v, t):
+    ground(v, -20, 340)
+    for x in (0, 260):
+        pole_v(v, x, -10, 20, 4, seed=x)
+    if t == 3:
+        v.line([(0, 15), (260, 15)], "#55595B", 1.3)
+    else:
+        rope(v, [(0, 15), (260, 15)], 1)
+    # tripod + bundle at right
+    pole_v(v, 300, 0, 150, 6, seed=3)
+    v.line([(270, 0), (300, 150)], C["Bark"], 5)
+    v.line([(330, 0), (300, 150)], C["Bark"], 5)
+    rope(v, [(300, 150), (300, 95)], 1)
+    rope(v, [(260, 15), (285, 60), (300, 95)], 1)
+    for i, (dx, dy) in enumerate(((-6, 85), (6, 86), (0, 76))):
+        rock(v, 300 + dx, dy, 7, seed=i)
+    v.line([(288, 92), (312, 92), (306, 70), (294, 70), (288, 92)], "#8C7A58", 1)
+    if t == 1:
+        log_h(v, 280, 320, 5, 10, seed=2)
+    elif t == 2:
+        v.rect(275, 0, 325, 4, fill=C["Weathered Plank"], width=1.2)
+    else:
+        v.rect(275, 0, 325, 2, fill=C["Steel"], width=1.2)
+
+
+def deadfall(v, t):
+    ground(v, -20, 260)
+    # figure-4 trigger at x 200, prop height 60
+    v.line([(200, 0), (200, 55)], C["Fresh-cut Wood"], 3)
+    v.line([(185, 30), (225, 50)], C["Fresh-cut Wood"], 3)
+    v.line([(196, 56), (230, 45)], C["Fresh-cut Wood"], 3)
+    # log from ground at x 0 to prop at x 205,y 65 (angle)
+    ang = math.atan2(62, 205)
+    L = 230
+    cx, cy = 0, 15
+    ux, uy = math.cos(ang), math.sin(ang)
+    nx, ny = -uy, ux
+    r = 15
+    pts = [(cx + nx * r, cy + ny * r), (cx + ux * L + nx * r, cy + uy * L + ny * r), (cx + ux * L - nx * r, cy + uy * L - ny * r), (cx - nx * r, cy - ny * r)]
+    v.poly(pts, fill=C["Bark"], width=1.5)
+    if t == 2:
+        for k in (0.3, 0.55, 0.8):
+            px_, py_ = cx + ux * L * k + nx * (r + 7), cy + uy * L * k + ny * (r + 7)
+            rock(v, px_, py_, 9, seed=int(k * 10))
+        rope(v, [(cx + ux * 50 + nx * 15, cy + uy * 50 + ny * 15), (cx + ux * 50 - nx * 15, cy + uy * 50 - ny * 15)], 2)
+    if t == 3:
+        for k in (0.25, 0.45, 0.65, 0.85):
+            bx, by = cx + ux * L * k - nx * r, cy + uy * L * k - ny * r
+            stake(v, bx, by, math.degrees(ang) - 90, 18, d=3, tip=8, col=C["Steel"], tipcol=C["Rust Orange"], width=1)
+        q0 = (cx + ux * 60 + nx * r, cy + uy * 60 + ny * r)
+        v.poly([q0, (q0[0] + ux * 80, q0[1] + uy * 80), (q0[0] + ux * 80 + nx * 6, q0[1] + uy * 80 + ny * 6), (q0[0] + nx * 6, q0[1] + ny * 6)], fill=C["Steel"], width=1)
+    v.circle(205, 8, 5, fill=C["Dried Blood"], outline=None)
+
+
+def snare(v, t):
+    ground(v, -20, 280)
+    # springpole: anchored at x 0, bent towards x 200
+    pts = []
+    for i in range(21):
+        a = i / 20
+        pts.append((a * 170, 250 * math.sin(a * math.pi * 0.55) - (a ** 2) * 60))
+    v.line(pts, C["Bark"], 7)
+    v.line(pts, INK, 1)
+    tip = pts[-1]
+    line_col_rope = t != 3
+    if line_col_rope:
+        rope(v, [tip, (200, 30)], 1)
+    else:
+        v.line([tip, (200, 30)], "#55595B", 1.3)
+    # trigger peg
+    pole_v(v, 200, -10, 30, 5, seed=1)
+    v.line([(190, 26), (215, 26)], C["Fresh-cut Wood"] if t != 2 else C["Weathered Plank"], 4)
+    if t == 2:
+        v.rect(185, 0, 189, 30, fill=C["Weathered Plank"], width=1)
+        v.rect(211, 0, 215, 30, fill=C["Weathered Plank"], width=1)
+    # noose (ellipse on ground)
+    v.sh.ellipse(*v.px(235, 4), 20 * v.s, 6 * v.s, fill=None, outline=rgb("#55595B" if t == 3 else "#8C7A58"), width=2)
+    if line_col_rope:
+        rope(v, [(215, 26), (235, 10)], 1)
+    else:
+        v.line([(215, 26), (235, 10)], "#55595B", 1.3)
+
+
+def burn_trench_section(v, t, state="unlit"):
+    v.rect(-30, -70, 90, 0, fill=SOIL, outline=None)
+    v.poly([(0, 0), (60, 0), (52, -40), (8, -40)], fill=VOID, width=1.5)
+    if t == 2:
+        v.poly([(0, 0), (4, 0), (12, -40), (8, -40)], fill=C["Weathered Plank"], width=1)
+        v.poly([(56, 0), (60, 0), (52, -40), (48, -40)], fill=C["Weathered Plank"], width=1)
+    if t == 3:
+        v.line([(1, 0), (9, -39), (51, -39), (59, 0)], C["Steel"], 4)
+    r = rng(t)
+    for i in range(9):
+        log_end(v, r.uniform(14, 46), r.uniform(-34, -6), r.uniform(6, 10), seed=i)
+    v.line([(-30, 0), (0, 0)], INK, 2)
+    v.line([(60, 0), (90, 0)], INK, 2)
+
+
+def burn_trench_elev(v, state):
+    ground(v, -10, 410, 0, 50)
+    v.rect(0, -40, 400, 0, fill=VOID, width=1.2)
+    r = rng(5)
+    for i in range(26):
+        x = r.uniform(5, 380)
+        log_h(v, x, x + r.uniform(30, 70), r.uniform(-34, -4), r.uniform(5, 9), seed=i, ends=True)
+    if state == "burning":
+        for i in range(16):
+            x = 15 + i * 25 + r.uniform(-5, 5)
+            h = r.uniform(30, 70)
+            v.poly([(x - 10, 0), (x + 10, 0), (x + r.uniform(-4, 4), h)], fill=C["Firelight"], outline=None, alpha=210)
+            v.poly([(x - 5, 0), (x + 5, 0), (x, h * 0.55)], fill="#F2C27A", outline=None, alpha=220)
+    if state == "burnt":
+        v.rect(0, -40, 400, -10, fill="#1B1A19", outline=None)
+        for i in range(20):
+            v.circle(r.uniform(10, 390), r.uniform(-12, -2), r.uniform(1.5, 3), fill=C["Ember"] if i % 4 == 0 else "#3A3634", outline=None)
+
+
+def build_traps():
+    sh = Sheet(4096, 2960)
+    sh.title_block("Player-built structures · Traps and area denial",
+                   "CA_Buildables_Traps_Sheet.png", "100 cm grid · all dimensions in cm",
+                   "Drawn elevations and sections are authoritative")
+    caveat(sh, 30, 122, 4036,
+           "Painted trap reference BLOCKED: generation refused (free-tier daily image limit, 2026-11-07). "
+           "Tiers for noise trap, tripwire, deadfall, snare and burn trench are Agent 1 PROPOSALS (the brief lists only rope, rocks, sticks, string, cans "
+           "and fuel for them): T2 adds plank parts, T3 swaps rope for wire or adds scrap steel. Confirm with design before modelling T2/T3 of these.", 18)
+    tcol = {1: C["Bark"], 2: "#6B5E48", 3: "#4E5457"}
+    tn = {1: "T1", 2: "T2", 3: "T3"}
+    Y0 = 200
+
+    # ---- A spike pit
+    sh.panel(30, Y0, 2020, 900, "A  Spike pit · SM_Build_SpikePit", "dug pit (shovel) + sharpened sticks + cover · section through centre")
+    s = 1.6
+    for t in (1, 2, 3):
+        ox = 110 + (t - 1) * 510
+        v = View(sh, ox + 50 * s, Y0 + 200, s)
+        v.grid(-50, -190, 250, 0, 100, labels=(t == 1), ground=False)
+        spike_pit_section(v, t)
+        sh.label_box(ox, Y0 + 80, {1: "T1 · sticks", 2: "T2 · plank-lined", 3: "T3 · rebar on steel base"}[t], 18, "Bold", "#FFFFFF", tcol[t])
+        if t == 1:
+            v.dim_h(0, 200, -150, "200", off=26, size=14)
+            v.dim_v(-150, 0, 200, "150 deep", off=48, size=13)
+            v.dim_v(-150, -75, 25, "75", off=-18, size=12)
+    vp = View(sh, 1690, Y0 + 470, 1.15)
+    spike_pit_plan(vp)
+    sh.text(1660, Y0 + 80, "Plan (cover 230 × 230 over pit)", 18, "Bold")
+    vp.dim_h(-15, 215, -15, "cover 230", off=26, size=13)
+    sh.text(110, Y0 + 580,
+            "Pit 200 × 200 × 150, 16 stakes Ø6 × 75 on a 50 cm grid (4 × 4), fire-hardened tips. Cover: lattice of sticks 230 × 230 with leaf litter, "
+            "one separate mesh that breaks and falls in when stepped on (sprung state). States: Armed (cover on), Sprung (cover in pit, zombie impaled), "
+            "Needs re-arm (2–6 stakes snapped, tips stained Dried Blood #4E2320). T2: planks 4 cm line the walls and floor (no cave-in, faster re-arm). "
+            "T3: Ø3.5 rebar spikes welded to a 192 × 192 steel base plate (does not snap; bends). Pit volume is a terrain cut, not part of the mesh: "
+            "the mesh is lining + stakes + cover; pivot at the pit's top-left corner at ground level.",
+            18, "Regular", INK, maxw=1880)
+
+    # ---- B barbed wire
+    sh.panel(2070, Y0, 1996, 900, "B  Barbed wire fence · SM_Build_BarbedFence", "posts + barbed wire · 400 module")
+    s = 1.35
+    for t in (1, 2, 3):
+        ox = 2150 + (t - 1) * 640
+        v = View(sh, ox, Y0 + 430, s)
+        v.grid(0, 0, 400, 200, 100, labels=(t == 1), ground=False)
+        barbed_fence(v, t)
+        sh.label_box(ox, Y0 + 80, {1: "T1 · stick posts", 2: "T2 · plank posts + X-brace", 3: "T3 · steel posts + coil"}[t], 17, "Bold", "#FFFFFF", tcol[t])
+        if t == 1:
+            v.dim_v(0, 125, 0, "125", off=-34, size=13)
+            v.dim_h(0, 200, 0, "200 c/c", off=40, size=13)
+    sh.text(2140, Y0 + 580,
+            "Posts at 0 / 200 / 400 (end posts shared between modules), 125 above ground. 4 strands at 30 / 60 / 90 / 115 with 4 cm sag "
+            "(T3: 5 strands + Ø36 concertina coil along the top). Wire strands are separate spline meshes that can deform when zombies tangle "
+            "(Agent 3 may swap to cable components). Posts: T1 sharpened sticks Ø10; T2 sawn plank posts 10 × 10 with X-brace; T3 5 × 5 angle steel "
+            "welded to 16 × 2 base plates. Wire: dark steel #55595B with rust flecks.", 18, "Regular", INK, maxw=1860)
+
+    # ---- C noise trap
+    Y1 = Y0 + 920
+    sh.panel(30, Y1, 1330, 860, "C  Noise trap · SM_Build_NoiseTrap", "string + tin cans")
+    s = 1.8
+    for t in (1, 2, 3):
+        v = View(sh, 160, Y1 + 40 + t * 190, s)
+        sh.label_box(160 + 320 * s + 30, Y1 + 40 + t * 190 - 60, tn[t], 17, "Bold", "#FFFFFF", tcol[t])
+        noise_trap(v, t)
+        if t == 1:
+            v.dim_v(0, 40, 0, "40", off=-22, size=12)
+            v.dim_h(0, 300, 60, "300", off=-20, size=13)
+    sh.text(110, Y1 + 720, "Stakes 60 high, 300 apart; string at 40. 3 clusters of 3 cans (Ø7.5 × 11), hung 8 cm, each can a physics part "
+            "(rattle anim). T2 plank stakes. T3 wire + scrap steel pieces (louder).", 17, "Regular", INK, maxw=1200)
+
+    # ---- D tripwire
+    sh.panel(1380, Y1, 1330, 860, "D  Tripwire alarm · SM_Build_Tripwire", "rope, rocks, sticks")
+    for t in (1, 2, 3):
+        v = View(sh, 1430 + (t - 1) * 425, Y1 + 420, 1.12)
+        tripwire(v, t)
+        sh.label_box(1430 + (t - 1) * 425, Y1 + 80, tn[t], 17, "Bold", "#FFFFFF", tcol[t])
+        if t == 1:
+            v.dim_v(0, 150, 335, "150", off=14, size=12)
+            v.dim_h(0, 260, 15, "260", off=-16, size=12)
+    sh.text(1460, Y1 + 560, "Line at 15 cm between pegs. Pulling it slips the release; a net of 3 rocks drops from a 150 tripod onto a "
+            "strike log (T2 plank, T3 steel plate = loudest). Moving: rock net, line.", 17, "Regular", INK, maxw=1200)
+
+    # ---- E snare
+    sh.panel(2730, Y1, 1336, 860, "E  Snare · SM_Build_Snare", "springpole + noose (animals, zombie ankles)")
+    for t in (1, 2, 3):
+        v = View(sh, 2800 + (t - 1) * 420, Y1 + 500, 1.25)
+        snare(v, t)
+        sh.label_box(2800 + (t - 1) * 420, Y1 + 80, {1: "T1 rope", 2: "T2 plank trigger", 3: "T3 steel wire"}[t], 16, "Bold", "#FFFFFF", tcol[t])
+        if t == 1:
+            v.dim_v(0, 250, -5, "≈250 pole", off=-20, size=12)
+    sh.text(2800, Y1 + 560, "Bent sapling or cut pole (Ø7, ~280 long) held by a notched trigger peg; noose Ø40 lies on the ground. "
+            "Moving: springpole (bend → release anim), noose. Catches rabbits; holds a zombie ankle for a few seconds (gameplay).",
+            17, "Regular", INK, maxw=1200)
+
+    # ---- F deadfall
+    Y2 = Y1 + 880
+    sh.panel(30, Y2, 2020, 840, "F  Deadfall · SM_Build_Deadfall", "heavy log on a figure-4 trigger")
+    for t in (1, 2, 3):
+        ox = 110 + (t - 1) * 640
+        v = View(sh, ox, Y2 + 400, 2.1 if False else 2.0)
+        v.grid(0, 0, 250, 100, 100, labels=(t == 1), ground=False)
+        deadfall(v, t)
+        sh.label_box(ox, Y2 + 80, {1: "T1 · log", 2: "T2 · log + lashed rocks", 3: "T3 · + welded spikes / weight"}[t], 17, "Bold", "#FFFFFF", tcol[t])
+        if t == 1:
+            v.dim_v(0, 62, 215, "62", off=26, size=12)
+            v.dim_h(0, 230, 0, "log Ø30 × 230", off=34, size=13)
+    sh.text(110, Y2 + 520, "Log Ø30 × 230 propped at 62 cm by a figure-4 trigger (3 sticks, separate meshes, they scatter when sprung). "
+            "Bait at the trigger. The log is a physics body when sprung (falls, ~120 kg). T2: rocks lashed on top for weight. "
+            "T3: rebar spikes welded to steel straps on the underside plus a scrap steel weight. Footprint 250 × 60.", 18, "Regular", INK, maxw=1880)
+
+    # ---- G burn trench / fire ring
+    sh.panel(2070, Y2, 1996, 840, "G  Burn trench / fire ring · SM_Build_BurnTrench", "dug trench + fuel, lit to block a horde")
+    for t in (1, 2, 3):
+        v = View(sh, 2150 + (t - 1) * 200, Y2 + 260, 1.6)
+        burn_trench_section(v, t)
+        sh.label_box(2150 + (t - 1) * 200 - 30, Y2 + 80, tn[t] + {1: " dug", 2: " plank", 3: " steel"}[t], 15, "Bold", "#FFFFFF", tcol[t])
+    vv = View(sh, 2150, Y2 + 260, 1.6)
+    vv.dim_h(0, 60, 0, "60", off=-18, size=12)
+    vv.dim_v(-40, 0, 60, "40", off=16, size=12)
+    for i, stt in enumerate(("unlit", "burning", "burnt")):
+        v = View(sh, 2780, Y2 + 200 + i * 120, 0.75)
+        burn_trench_elev(v, stt)
+        sh.text(2780 + 300 + 20, Y2 + 200 + i * 120 - 40, stt, 16, "SemiBold", INK)
+    v = View(sh, 2780, Y2 + 200, 0.75)
+    v.dim_h(0, 400, 0, "400 segment", off=-60, size=12)
+    # fire ring plan
+    vr = View(sh, 3700, Y2 + 330, 0.55)
+    vr.circle(0, 0, 200, fill=VOID, width=1.5)
+    vr.circle(0, 0, 140, fill=C["Moss"], width=1.5)
+    for i in range(24):
+        a = i / 24 * 2 * math.pi
+        vr.circle(math.cos(a) * 170, math.sin(a) * 170, 8, fill=C["Bark"], outline=None)
+    vr.dim_h(-200, 200, -200, "fire ring Ø400 outer", off=26, size=12)
+    sh.text(2150, Y2 + 600, "Trench 60 wide × 40 deep, straight segments of 400 (free-form, drag like walls) or a fire ring "
+            "(Ø400 outer, trench 60, built around a point). Fuel: branches and split logs, then fuel units (petrol/alcohol). States: Unlit, Burning "
+            "(fire VFX by Agent 3, light #E08A3C, large light radius: it lights the player up too), Burnt (charcoal + embers, must be refilled). "
+            "T2: plank edging stops the sides crumbling; T3: steel sheet channel liner, reusable, burns longer. Trench cut = terrain; mesh = liner + fuel.",
+            17, "Regular", INK, maxw=1830)
+    sh.save(os.path.join(CONCEPT, "CA_Buildables_Traps_Sheet.png"))
+
+
+# ======================================================================== GHOST SHEET
+from PIL import ImageChops  # noqa: E402
+
+MAGENTA = "#FF00FF"
+
+
+def offscreen(fn, w, h, ox, oy, scale):
+    """Render fn(view) offscreen; return (RGB image, alpha mask) at SS resolution."""
+    o = Sheet(w, h, bg=MAGENTA)
+    v = View(o, ox, oy, scale)
+    fn(v)
+    im = o.im
+    import numpy as np
+    a = np.asarray(im).astype(int)
+    dist = np.abs(a[..., 0] - 255) + np.abs(a[..., 1] - 0) + np.abs(a[..., 2] - 255)
+    m = np.clip((dist - 30) * 4, 0, 255).astype("uint8")
+    return im, Image.fromarray(m, "L")
+
+
+def ghostify(im, mask, col=GHOST, fill_a=0.24, edge_a=0.95, pulse=None):
+    """Turn rendered geometry into the ghost look: translucent fill + bright edges."""
+    import numpy as np
+    g = im.convert("L").filter(ImageFilter.FIND_EDGES)
+    me = mask.filter(ImageFilter.FIND_EDGES).filter(ImageFilter.MaxFilter(3))
+    e = np.maximum(np.asarray(g).astype(float) / 255 * 1.6, np.asarray(me).astype(float) / 255)
+    e = np.clip(e, 0, 1) * (np.asarray(mask).astype(float) / 255 > 0.02)
+    a = np.asarray(mask).astype(float) / 255 * fill_a
+    alpha = np.clip(a + e * edge_a * 0.75, 0, 1)
+    out = Image.new("RGBA", im.size, rgb(col, 0))
+    out.putalpha(Image.fromarray((alpha * 255).astype("uint8"), "L"))
+    return out
+
+
+def solid(im, mask):
+    out = im.convert("RGBA")
+    out.putalpha(mask)
+    return out
+
+
+def night_bg(sh, x, y, w, h, day=False, seed=1):
+    import numpy as np
+    top, bot = (C["Moonlit Shadow"], C["Night Sky"]) if not day else ("#8E9693", C["Moss"])
+    for i in range(int(h)):
+        sh.rect(x, y + i, w, 1, fill=mix(top, bot, i / h))
+    r = rng(seed)
+    for _ in range(9):
+        tx = x + r.uniform(0, w)
+        tw = r.uniform(14, 34)
+        sh.rect(tx, y, tw, h * 0.86, fill=mix(C["Deep Forest"] if day else "#0B0E12", bot, 0.25), alpha=230)
+    sh.rect(x, y + h * 0.86, w, h * 0.14, fill=C["Deep Forest"] if day else "#0E1210")
+
+
+def paste_ss(sh, img, x, y):
+    sh.im.paste(img, (int(x * SS), int(y * SS)), img)
+
+
+def build_ghost():
+    sh = Sheet(4096, 2700)
+    sh.title_block("Player-built structures · Ghost / blueprint look",
+                   "CA_Buildables_Ghost_Sheet.png", "100 cm grid · all dimensions in cm",
+                   "Drawn with the same geometry as the build sheets")
+
+    # ---- A: progression at night
+    sh.panel(30, 130, 2700, 1130, "A  Ghost fills piece by piece", "night, T1 log wall · each deposit turns one ghost log solid · next slot pulses")
+    s = 1.15
+    W, H = 600, 470
+    for i, (n_done, label) in enumerate(((0, "placed · 0 / 10 logs"), (4, "4 / 10 · next slot pulses"), (9, "9 / 10"))):
+        x0 = 80 + i * 870
+        y0 = 280
+        night_bg(sh, x0, y0, W + 200, H + 120, seed=i + 3)
+        ox, oy = 100, H + 60
+
+        def all_logs(v):
+            wall_t1(v)
+
+        def done_logs(v, n=n_done):
+            for k in range(n):
+                log_h(v, 0, 400, 15 + 30 * k, 30, seed=100 + k)
+
+        def next_log(v, n=n_done):
+            log_h(v, 0, 400, 15 + 30 * n, 30, seed=100 + n)
+
+        im, m = offscreen(all_logs, W + 200, H + 120, ox, oy, s)
+        paste_ss(sh, ghostify(im, m), x0, y0)
+        if n_done:
+            im2, m2 = offscreen(done_logs, W + 200, H + 120, ox, oy, s)
+            paste_ss(sh, solid(im2, m2), x0, y0)
+        if n_done < 10:
+            im3, m3 = offscreen(next_log, W + 200, H + 120, ox, oy, s)
+            paste_ss(sh, ghostify(im3, m3, fill_a=0.5, edge_a=1.0), x0, y0)
+        # snap points
+        for (sx, sy) in ((0, 0), (400, 0), (0, 300), (400, 300)):
+            px_, py_ = x0 + ox + sx * s, y0 + oy - sy * s
+            sh.poly([(px_, py_ - 9), (px_ + 9, py_), (px_, py_ + 9), (px_ - 9, py_)], fill=GHOST, outline=INK, width=1)
+        # material strip
+        mx, my = x0 + 20, y0 + 20
+        sh.ellipse(mx + 16, my + 16, 15, 15, fill=C["Fresh-cut Wood"], outline=INK, width=1.5)
+        sh.text(mx + 40, my + 2, f"{10 - n_done}", 26, "Bold", GHOST)
+        sh.text(x0 + 10, y0 + H + 130, label, 20, "SemiBold", INK)
+    sh.text(80, 900,
+            "Placement: the ghost snaps to terrain and to snap points (diamonds) at piece ends and every 100 cm. "
+            "Material strip: one icon per material still needed with the remaining count, drawn in the world beside the ghost "
+            "(icons, no other numbers on screen). Each deposit plays a hammer/thud and swaps one ghost log for the solid mesh. "
+            "The next slot to fill is drawn at 50% fill and pulses. Finished pieces stop being ghost entirely.",
+            19, "Regular", INK, maxw=2560)
+
+    # ---- B: ghost material spec
+    sh.panel(2750, 130, 1316, 1130, "B  Ghost material spec", "M_Ghost / MI_Ghost_Valid, MI_Ghost_Invalid")
+    rows = [
+        ("Valid colour", GHOST, "Bone-white ghost #E3DED0: the palette's Bone White, slightly lifted. Never cyan or neon (no sci-fi hologram)."),
+        ("Invalid colour", GHOST_BAD, "Rust red #B5502E when blocked (overlap, too steep, no snap, not enough room)."),
+        ("Fill opacity", None, "24% (next slot 50%). Unlit / emissive 0.6 so it reads at night without lighting the scene."),
+        ("Edge", None, "Bright edge from geometry edges + Fresnel, 95% opacity, about 1.5 px at 1080p. Hand-drawn chalk feel, not scanlines."),
+        ("Pulse", None, "Next slot: opacity 35 → 60% at 1.2 Hz, ease in/out. Whole ghost does not flicker."),
+        ("Depth", None, "Ghost renders through foliage (custom depth) at 40% so the player can place behind ferns."),
+        ("Shadow / sound", None, "Casts no shadow, makes no noise; the world does not react to a ghost."),
+    ]
+    yy = 220
+    for name, col, txt in rows:
+        if col:
+            sh.rect(2790, yy + 2, 60, 40, fill=col, outline=INK, width=1)
+            sh.text(2862, yy + 10, col, 17, "SemiBold", INK)
+        sh.text(2790 if not col else 2960, yy + (0 if not col else 10), name, 20, "Bold", NOTE)
+        yy = sh.text(2790, yy + 50, txt, 18, "Regular", INK, maxw=1240) + 24
+
+    # ---- C: invalid + plating ghost + day readability
+    sh.panel(30, 1280, 2700, 1390, "C  States", "invalid placement · metal plating ghost on a T2 wall · daytime readability")
+    s = 1.0
+    W, H = 560, 420
+    # invalid
+    x0, y0 = 80, 1420
+    night_bg(sh, x0, y0, W + 160, H + 100, seed=11)
+    im, m = offscreen(lambda v: wall_t1(v), W + 160, H + 100, 90, H + 40, s)
+    paste_ss(sh, ghostify(im, m, col=GHOST_BAD, fill_a=0.3), x0, y0)
+    sh.rect(x0 + 90 + 250, y0 + H + 40 - 140, 120, 140, fill="#3B3226", outline=INK, width=1.5)
+    sh.text(x0 + 90 + 310, y0 + H + 40 - 70, "rock", 16, "Medium", "#D9D2C1", anchor="mm")
+    sh.text(x0, y0 + H + 115, "Invalid: whole ghost turns rust red; cannot confirm.", 19, "SemiBold", INK)
+    # plating ghost
+    x0 = 900
+
+    def t2(v):
+        wall_t2(v)
+
+    def plates_all(v):
+        wall_t3(v)
+
+    def plates_done(v):
+        k = 0
+        for xx in range(0, 400, 100):
+            for yyy in (0, 150):
+                if k < 3:
+                    plate(v, xx, yyy, xx + 100, yyy + 150, seed=50 + k)
+                k += 1
+    night_bg(sh, x0, y0, W + 160, H + 100, seed=12)
+    im, m = offscreen(t2, W + 160, H + 100, 90, H + 40, s)
+    paste_ss(sh, solid(im, m), x0, y0)
+    im, m = offscreen(plates_all, W + 160, H + 100, 90, H + 40, s)
+    paste_ss(sh, ghostify(im, m, fill_a=0.3), x0, y0)
+    im, m = offscreen(plates_done, W + 160, H + 100, 90, H + 40, s)
+    paste_ss(sh, solid(im, m), x0, y0)
+    sh.text(x0, y0 + H + 115, "Plating: same flow on top of a finished wall; 3 / 8 plates welded.", 19, "SemiBold", INK)
+    # day
+    x0 = 1720
+    night_bg(sh, x0, y0, W + 160, H + 100, day=True, seed=13)
+    im, m = offscreen(lambda v: (wall_t1(v), spikes_front(v, 0, 1)), W + 160, H + 100, 90, H + 40, s * 0.95)
+    paste_ss(sh, ghostify(im, m), x0, y0)
+    sh.text(x0, y0 + H + 115, "Daytime, overcast forest: the bone-white edge still reads.", 19, "SemiBold", INK)
+    # painted-to-ghost demo
+    g1 = load_raw("G01_Buildables_Walls.png").crop((40, 30, 420, 740))
+    g1s = g1.resize((int(g1.width * 0.62) * SS, int(g1.height * 0.62) * SS), Image.LANCZOS)
+    m = Image.new("L", g1s.size, 255)
+    gray = ImageEnhance.Contrast(g1s.convert("RGB")).enhance(1.4)
+    yb = 2120
+    sh.text(80, yb - 10, "Same look applied to the painted T1 reference:", 19, "Bold", INK)
+    night_bg(sh, 80, yb + 25, 520, 470, seed=14)
+    paste_ss(sh, ghostify(gray, m, fill_a=0.18, edge_a=0.9), 80 + 20, yb + 25 + 10)
+    sh.text(640, yb + 30,
+            "Other buildables use the same material with their own meshes: spike pit (cover lattice + stakes), "
+            "watchtower (legs first, then bracing, deck, parapet), gate (posts, then leaves). Free-form walls: the player drags "
+            "between two points; the ghost shows a dashed centre line and one ghost log per 30 cm of height for the full dragged "
+            "length; the material strip shows the log count, which depends on length (one log per 400 cm, partial logs cut).",
+            19, "Regular", INK, maxw=2040)
+    # free-form schematic
+    vf = View(sh, 700, 2600, 0.7)
+    for k in range(0, 1000, 24):
+        vf.line([(k, 0), (k + 12, 0)], GHOST_BAD if False else INK2, 2)
+    for xx in (0, 1000):
+        a, b = vf.px(xx, 0)
+        sh.poly([(a, b - 10), (a + 10, b), (a, b + 10), (a - 10, b)], fill=GHOST, outline=INK, width=1)
+    vf.dim_h(0, 1000, 0, "dragged length 1000 cm → 3 log lengths per course (400 + 400 + 200 cut) × 10 courses", off=30, size=15)
+
+    # ---- D: painted note
+    sh.panel(2750, 1280, 1316, 1390, "D  Notes for Agent 2 / Agent 3", None)
+    notes = ("• The ghost uses the final meshes (no separate ghost mesh): Agent 3 swaps materials per element (log, plank, plate, stake).\n\n"
+             "• Every buildable must therefore be split into the same elements the player deposits: one element per log, plank, plate, stake set, "
+             "post, leaf. Name elements in order of filling (Log_00 … Log_09, Plank_00 …, Plate_00 …).\n\n"
+             "• Ghost colours come from the palette in Concept/StyleGuide.md; no new hues.\n\n"
+             "• Painted ghost concept is not needed; this sheet is drawn from the build-sheet geometry so it is exact. "
+             "No image generation was used for this sheet except the G01 crop in panel C.")
+    sh.text(2790, 1360, notes, 19, "Regular", INK, maxw=1240)
+    sh.save(os.path.join(CONCEPT, "CA_Buildables_Ghost_Sheet.png"))
 
 
 if __name__ == "__main__":
@@ -550,3 +1111,7 @@ if __name__ == "__main__":
         build_walls()
     if "gatetower" in which:
         build_gatetower()
+    if "traps" in which:
+        build_traps()
+    if "ghost" in which:
+        build_ghost()

@@ -15,3 +15,5 @@ Modules
 Run every script with the bpy module from Tools/setup_blender.sh:
     ~/.venv-blender/bin/python Source/Blender/Scripts/<Script>.py
 """
+
+import bpy  # noqa: F401  (must load before bmesh/mathutils users)
