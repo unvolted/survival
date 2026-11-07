@@ -948,8 +948,8 @@ def night_bg(sh, x, y, w, h, day=False, seed=1):
         sh.rect(x, y + i, w, 1, fill=mix(top, bot, i / h))
     r = rng(seed)
     for _ in range(9):
-        tx = x + r.uniform(0, w)
         tw = r.uniform(14, 34)
+        tx = x + r.uniform(0, w - tw)
         sh.rect(tx, y, tw, h * 0.86, fill=mix(C["Deep Forest"] if day else "#0B0E12", bot, 0.25), alpha=230)
     sh.rect(x, y + h * 0.86, w, h * 0.14, fill=C["Deep Forest"] if day else "#0E1210")
 
@@ -1001,7 +1001,7 @@ def build_ghost():
         sh.ellipse(mx + 16, my + 16, 15, 15, fill=C["Fresh-cut Wood"], outline=INK, width=1.5)
         sh.text(mx + 40, my + 2, f"{10 - n_done}", 26, "Bold", GHOST)
         sh.text(x0 + 10, y0 + H + 130, label, 20, "SemiBold", INK)
-    sh.text(80, 900,
+    sh.text(80, 975,
             "Placement: the ghost snaps to terrain and to snap points (diamonds) at piece ends and every 100 cm. "
             "Material strip: one icon per material still needed with the remaining count, drawn in the world beside the ghost "
             "(icons, no other numbers on screen). Each deposit plays a hammer/thud and swaps one ghost log for the solid mesh. "
@@ -1059,7 +1059,7 @@ def build_ghost():
     im, m = offscreen(t2, W + 160, H + 100, 90, H + 40, s)
     paste_ss(sh, solid(im, m), x0, y0)
     im, m = offscreen(plates_all, W + 160, H + 100, 90, H + 40, s)
-    paste_ss(sh, ghostify(im, m, fill_a=0.3), x0, y0)
+    paste_ss(sh, ghostify(im, m, fill_a=0.5, edge_a=1.0), x0, y0)
     im, m = offscreen(plates_done, W + 160, H + 100, 90, H + 40, s)
     paste_ss(sh, solid(im, m), x0, y0)
     sh.text(x0, y0 + H + 115, "Plating: same flow on top of a finished wall; 3 / 8 plates welded.", 19, "SemiBold", INK)
@@ -1072,7 +1072,10 @@ def build_ghost():
     # painted-to-ghost demo
     g1 = load_raw("G01_Buildables_Walls.png").crop((40, 30, 420, 740))
     g1s = g1.resize((int(g1.width * 0.62) * SS, int(g1.height * 0.62) * SS), Image.LANCZOS)
-    m = Image.new("L", g1s.size, 255)
+    import numpy as np
+    arr = np.asarray(g1s.convert("RGB")).astype(int)
+    d = np.abs(arr - np.array([200, 200, 205])).sum(axis=2)
+    m = Image.fromarray(np.clip((d - 45) * 5, 0, 255).astype("uint8"), "L").filter(ImageFilter.MedianFilter(5))
     gray = ImageEnhance.Contrast(g1s.convert("RGB")).enhance(1.4)
     yb = 2120
     sh.text(80, yb - 10, "Same look applied to the painted T1 reference:", 19, "Bold", INK)
