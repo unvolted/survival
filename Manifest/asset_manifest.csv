@@ -28,3 +28,61 @@ Build_Deadfall_T1,Buildable,none (greybox from brief),Greybox/Build_Deadfall_T1.
 Build_Deadfall_Weight_T1,Buildable,none (greybox from brief),Greybox/Build_Deadfall_Weight_T1.blend,SM_Build_Deadfall_Weight_T1_Intact.fbx,44,None,Greybox,Agent 2,"GREYBOX from brief dimensions; pivot bottom centre; attach to SOCKET_WeightArmed, drops to z=0; 190 x 30 cm log; 1 UCX; not verified in Unreal"
 Build_Snare_T1,Buildable,none (greybox from brief),Greybox/Build_Snare_T1.blend,SM_Build_Snare_T1_Intact.fbx,88,None,Greybox,Agent 2,"GREYBOX from brief dimensions; pivot bottom centre of the stake; small-animal snare: 60 cm stake, 24 cm noose loop on +X; 1 UCX; not verified in Unreal"
 Ref_Human_180,Reference,none (greybox from brief),Greybox/Ref_Human_180.blend,SM_Ref_Human_180.fbx,156,None,Greybox,Agent 2,GREYBOX from brief dimensions; pivot bottom centre between the feet; faces -Y; scale reference only; UCX box for scale tests; 1 UCX; not verified in Unreal
+CA_StyleGuide,Concept,CA_StyleGuide_Sheet.png; StyleGuide.md,,,,,Concept Done,Agent 1,"Palette (28 hex), drawn lighting-mood keys, material swatches (cropped from G01-G03), overgrowth rules, 5 do / 5 dont. Painted mood strip Blocked (see CA_LightingMoods_Painted)"
+CA_Buildables_Walls,Concept,CA_Buildables_Walls_Sheet.png,,,,,Concept Done,Agent 1,"Log wall T1/T2/T3, spike set T1/T2/T3, plate kit + 2 cm offset detail, log mesh, Intact/Damaged/Broken; painted ref G01 + G03 crop (drift noted on sheet)"
+CA_Buildables_GateTower,Concept,CA_Buildables_GateTower_Sheet.png,,,,,Concept Done,Agent 1,"Barricade door/window, gate, watchtower T1/T2/T3 drawn; painted watchtower ref Blocked; G03 crop for barricades"
+CA_Buildables_Traps,Concept,CA_Buildables_Traps_Sheet.png,,,,,Concept Done,Agent 1,"Spike pit, barbed wire, noise trap, tripwire, deadfall, snare, burn trench/fire ring T1/T2/T3 drawn; T2/T3 of the simple traps are Agent 1 proposals; painted ref Blocked"
+CA_Buildables_Ghost,Concept,CA_Buildables_Ghost_Sheet.png,,,,,Concept Done,Agent 1,"Ghost/blueprint material spec (#E3DED0 valid, #B5502E invalid), fill progression, plating ghost, free-form drag"
+CA_RuinKit_Walls,Concept,CA_RuinKit_Walls_Sheet.png,,,,,Concept Done,Agent 1,"Wall 400/200/100, window, door, corner pillar x Intact/Damaged/Overgrown; grid/plan/section rules; painted ref G02. Aligned with Agent 2 greybox: corner 30x30 pillar, door 100x220"
+CA_RuinKit_FloorsRoofsStairs,Concept,CA_RuinKit_FloorsRoofsStairs_Sheet.png,,,,,Concept Done,Agent 1,"Floor tile, roof slope, stairs, collapsed wall/floor/roof, rubble x 3 states drawn; painted ref Blocked"
+CA_LightingMoods_Painted,Concept,,,,,,Blocked,Agent 1,Image generation busy/limited: free-tier daily image limit reached 2026-11-07 (429). Retry later; drawn keys on CA_StyleGuide_Sheet.png cover the hex values
+CA_Buildables_Painted_TrapsTower,Concept,,,,,,Blocked,Agent 1,Image generation limit reached 2026-11-07 (429). Painted refs for traps and watchtower; drawn sheets are authoritative
+CA_RuinKit_Painted_FloorsRoofs,Concept,,,,,,Blocked,Agent 1,Image generation limit reached 2026-11-07 (429). Painted ref for floors/roofs/stairs/collapsed/rubble; drawn sheet is authoritative
+Build_LogWall_T2,Buildable,CA_Buildables_Walls_Sheet.png,,,,,Concept Done,Agent 1,T2 drawn with dimensions; Intact/Damaged/Broken notes on sheet
+Build_LogWall_T3,Buildable,CA_Buildables_Walls_Sheet.png,,,,,Concept Done,Agent 1,T3 drawn with dimensions; Intact/Damaged/Broken notes on sheet
+Build_SpikedWall_T2,Buildable,CA_Buildables_Walls_Sheet.png,,,,,Concept Done,Agent 1,T2 drawn with dimensions; Intact/Damaged/Broken notes on sheet
+Build_SpikedWall_T3,Buildable,CA_Buildables_Walls_Sheet.png,,,,,Concept Done,Agent 1,T3 drawn with dimensions; Intact/Damaged/Broken notes on sheet
+Build_BarbedWire_T2,Buildable,CA_Buildables_Traps_Sheet.png,,,,,Concept Done,Agent 1,T2 drawn with dimensions; Intact/Damaged/Broken notes on sheet
+Build_BarbedWire_T3,Buildable,CA_Buildables_Traps_Sheet.png,,,,,Concept Done,Agent 1,T3 drawn with dimensions; Intact/Damaged/Broken notes on sheet
+Build_WeldedGate_T2,Buildable,CA_Buildables_GateTower_Sheet.png,,,,,Concept Done,Agent 1,T2 drawn with dimensions; Intact/Damaged/Broken notes on sheet
+Build_WeldedGate_T3,Buildable,CA_Buildables_GateTower_Sheet.png,,,,,Concept Done,Agent 1,T3 drawn with dimensions; Intact/Damaged/Broken notes on sheet
+Build_BarricadeDoor_T2,Buildable,CA_Buildables_GateTower_Sheet.png,,,,,Concept Done,Agent 1,T2 drawn with dimensions; Intact/Damaged/Broken notes on sheet
+Build_BarricadeDoor_T3,Buildable,CA_Buildables_GateTower_Sheet.png,,,,,Concept Done,Agent 1,T3 drawn with dimensions; Intact/Damaged/Broken notes on sheet
+Build_BarricadeWindow_T2,Buildable,CA_Buildables_GateTower_Sheet.png,,,,,Concept Done,Agent 1,T2 drawn with dimensions; Intact/Damaged/Broken notes on sheet
+Build_BarricadeWindow_T3,Buildable,CA_Buildables_GateTower_Sheet.png,,,,,Concept Done,Agent 1,T3 drawn with dimensions; Intact/Damaged/Broken notes on sheet
+Build_Watchtower_T2,Buildable,CA_Buildables_GateTower_Sheet.png,,,,,Concept Done,Agent 1,T2 drawn with dimensions; Intact/Damaged/Broken notes on sheet
+Build_Watchtower_T3,Buildable,CA_Buildables_GateTower_Sheet.png,,,,,Concept Done,Agent 1,T3 drawn with dimensions; Intact/Damaged/Broken notes on sheet
+Build_SpikePit_T2,Buildable,CA_Buildables_Traps_Sheet.png,,,,,Concept Done,Agent 1,T2 drawn with dimensions; Intact/Damaged/Broken notes on sheet
+Build_SpikePit_T3,Buildable,CA_Buildables_Traps_Sheet.png,,,,,Concept Done,Agent 1,T3 drawn with dimensions; Intact/Damaged/Broken notes on sheet
+Build_NoiseTrap_T2,Buildable,CA_Buildables_Traps_Sheet.png,,,,,Concept Done,Agent 1,"T2 drawn with dimensions; Intact/Damaged/Broken notes on sheet (tier is an Agent 1 proposal, confirm)"
+Build_NoiseTrap_T3,Buildable,CA_Buildables_Traps_Sheet.png,,,,,Concept Done,Agent 1,"T3 drawn with dimensions; Intact/Damaged/Broken notes on sheet (tier is an Agent 1 proposal, confirm)"
+Build_Deadfall_T2,Buildable,CA_Buildables_Traps_Sheet.png,,,,,Concept Done,Agent 1,"T2 drawn with dimensions; Intact/Damaged/Broken notes on sheet (tier is an Agent 1 proposal, confirm)"
+Build_Deadfall_T3,Buildable,CA_Buildables_Traps_Sheet.png,,,,,Concept Done,Agent 1,"T3 drawn with dimensions; Intact/Damaged/Broken notes on sheet (tier is an Agent 1 proposal, confirm)"
+Build_Snare_T2,Buildable,CA_Buildables_Traps_Sheet.png,,,,,Concept Done,Agent 1,"T2 drawn with dimensions; Intact/Damaged/Broken notes on sheet (tier is an Agent 1 proposal, confirm)"
+Build_Snare_T3,Buildable,CA_Buildables_Traps_Sheet.png,,,,,Concept Done,Agent 1,"T3 drawn with dimensions; Intact/Damaged/Broken notes on sheet (tier is an Agent 1 proposal, confirm)"
+Build_FireRing_T2,Buildable,CA_Buildables_Traps_Sheet.png,,,,,Concept Done,Agent 1,"T2 drawn with dimensions; Intact/Damaged/Broken notes on sheet (tier is an Agent 1 proposal, confirm)"
+Build_FireRing_T3,Buildable,CA_Buildables_Traps_Sheet.png,,,,,Concept Done,Agent 1,"T3 drawn with dimensions; Intact/Damaged/Broken notes on sheet (tier is an Agent 1 proposal, confirm)"
+Build_Tripwire_T1,Buildable,CA_Buildables_Traps_Sheet.png,,,,,Concept Done,Agent 1,"Tripwire alarm (rope line 15 cm, rock net on 150 tripod, strike log)"
+Build_Tripwire_T2,Buildable,CA_Buildables_Traps_Sheet.png,,,,,Concept Done,Agent 1,"Tripwire alarm (rope line 15 cm, rock net on 150 tripod, strike log) (tier is an Agent 1 proposal, confirm)"
+Build_Tripwire_T3,Buildable,CA_Buildables_Traps_Sheet.png,,,,,Concept Done,Agent 1,"Tripwire alarm (rope line 15 cm, rock net on 150 tripod, strike log) (tier is an Agent 1 proposal, confirm)"
+Build_MetalPlate_Kit,Buildable,CA_Buildables_Walls_Sheet.png,,,,,Concept Done,Agent 1,"Plates 100x150 / 100x100 / 50x150 x 1 cm, one mesh per plate, back face 2 cm proud; differs from greybox Build_MetalPlate_T3 (single 400x300 sheet): Agent 2 to reconcile"
+Ruin_DoorLeaf,Modular,CA_RuinKit_Walls_Sheet.png,,,,,Concept Done,Agent 1,"Door leaf 96x218x4, hinged left jamb, 0-100 deg, separate moving mesh"
+Ruin_FloorCollapsed_400,Modular,CA_RuinKit_FloorsRoofsStairs_Sheet.png,,,,,Concept Done,Agent 1,"Upper slab broken at 170, half hanging to ground; 3 states"
+Ruin_RoofCollapsed_400,Modular,CA_RuinKit_FloorsRoofsStairs_Sheet.png,,,,,Concept Done,Agent 1,Roof slope fallen into the room; 3 states
+Ruin_RubblePile_02,Modular,CA_RuinKit_FloorsRoofsStairs_Sheet.png,,,,,Concept Done,Agent 1,Large rubble pile 400x200x120 (RubblePile_01 = 200x200x80 per concept; greybox is 200x160x80)
+Ruin_RoofGable_400,Modular,CA_RuinKit_FloorsRoofsStairs_Sheet.png,,,,,Planned,Agent 1,"Gable end triangle 400x200x20 and ridge cap 400: described in notes, not yet drawn"
+CA_EnvKey_TownStreet,Concept,,,,,,Planned,Agent 1,Environment key: overgrown town street
+CA_EnvKey_ForestCabin,Concept,,,,,,Planned,Agent 1,"Environment key: deep forest, buried cabin"
+CA_EnvKey_WarZone,Concept,,,,,,Planned,Agent 1,"Environment key: war zone edge, burnt tank, trenches"
+CA_EnvKey_BaseNight,Concept,,,,,,Planned,Agent 1,Environment key: player base at night under attack
+CA_Player_Survivor_Turnaround,Concept,,,,,,Planned,Agent 1,"Player survivor, 2 outfits, front/side/back/3-4, T-pose, 180 cm figure"
+CA_Zombie_Variants_Turnaround,Concept,,,,,,Planned,Agent 1,"5 zombie variants: civilian, soldier, rotten, crawler, bloated"
+CA_Bandit_Types_Turnaround,Concept,,,,,,Planned,Agent 1,3 bandit types
+CA_FPArms_Sheet,Concept,,,,,,Planned,Agent 1,First-person arms with sleeves
+CA_Props_Weapons_Sheet,Concept,,,,,,Planned,Agent 1,"Weapons, each tier and upgrade"
+CA_Props_Tools_Sheet,Concept,,,,,,Planned,Agent 1,"Axe, hammer, saw, shovel, crowbar, welding torch, mask, propane tank"
+CA_Props_MedicalFoodContainers_Sheet,Concept,,,,,,Planned,Agent 1,"Medical items, food, containers"
+CA_SurvivalBook_Sheet,Concept,,,,,,Planned,Agent 1,Survival Book closed and open pages
+CA_Foliage_Sheet,Concept,,,,,,Planned,Agent 1,"4 tree species living/dead, shrubs, ferns, grass, ivy/creeper decals, moss"
+CA_UI_Moodles,Concept,,,,,,Planned,Agent 1,"Moodle icons 256x256, 4 severity borders (drawn, not generated)"
+CA_UI_HealthPanel_CraftingMat_Book,Concept,,,,,,Planned,Agent 1,"Health panel body diagram, crafting mat, Survival Book layout, item icons"
